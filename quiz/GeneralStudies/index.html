@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>常識科學 課1-2 互動模擬題</title>
+<style>
+body { font-family: "WenQuanYi Zen Hei", "Microsoft JhengHei", sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f5f7fa; }
+h1 { color: #1a5276; text-align: center; }
+.question { background: white; border-radius: 10px; padding: 16px; margin: 16px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.options button { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
+.options button:hover { background: #eaf2f8; }
+.options button.correct { background: #d5f5e3; border-color: #27ae60; }
+.options button.wrong { background: #fadbd8; border-color: #e74c3c; }
+.feedback { margin-top: 8px; font-weight: bold; }
+.score { text-align: center; font-size: 1.2em; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>常識科學 四上 課1-2 互動模擬題</h1>
+<p style="text-align:center;">點選答案，即時顯示對錯</p>
+<div id="quiz"></div>
+<div class="score" id="score"></div>
+
+<script>
+const questions = [
+  { q: "1. 火成岩是由________冷卻和凝固後形成的岩石，例如花崗岩和________。", options: ["岩漿；玄武岩", "沉積；頁岩", "高壓；高溫", "24小時；一年"], ans: 0 },
+  { q: "2. 沉積岩是被水沖下的岩石碎屑和土壤________而成的岩石，例如砂岩和________。", options: ["冷卻；玄武岩", "沉積；頁岩", "變質；大理岩", "自轉；公轉"], ans: 1 },
+  { q: "3. 變質岩是在________和________下變質而成的岩石，例如大理岩和片麻岩。", options: ["岩漿；凝固", "高壓；高溫", "沉積；碎屑", "直射；斜射"], ans: 1 },
+  { q: "4. 地球自轉一周需要________小時；地球公轉一周需時________。", options: ["24；一年", "365；一天", "12；半年", "48；兩年"], ans: 0 },
+  { q: "5. 當太陽光直射北半球時，北半球是________，南半球是________。", options: ["冬季；夏季", "夏季；冬季", "春季；秋季", "秋季；春季"], ans: 1 },
+  { q: "6. 以下哪種岩石是火成岩？", options: ["砂岩", "頁岩", "玄武岩", "大理岩"], ans: 2 },
+  { q: "7. 板塊移動和碰撞可能會引致：", options: ["只有下雨", "地震或火山爆發", "四季變化", "日夜變化"], ans: 1 },
+  { q: "8. 在一天不同時間，影子的長度和方向會改變，主要是因為：", options: ["地球公轉", "地球自轉", "地軸傾斜", "岩石變質"], ans: 1 },
+  { q: "9. 地核主要由甚麼組成？", options: ["岩石", "岩漿", "金屬", "土壤"], ans: 2 },
+  { q: "10. 岩石經過多年風吹雨打後會碎裂形成：", options: ["火成岩", "土壤", "金屬", "板塊"], ans: 1 }
+];
+
+let score = 0;
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((item, idx) => {
+  const div = document.createElement("div");
+  div.className = "question";
+  div.innerHTML = `<strong>${item.q}</strong><div class="options" id="opts${idx}"></div><div class="feedback" id="fb${idx}"></div>`;
+  quizDiv.appendChild(div);
+
+  const opts = document.getElementById("opts" + idx);
+  item.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.onclick = () => check(idx, i, btn);
+    opts.appendChild(btn);
+  });
+});
+
+function check(qIdx, choice, btn) {
+  const item = questions[qIdx];
+  const fb = document.getElementById("fb" + qIdx);
+  const buttons = document.querySelectorAll("#opts" + qIdx + " button");
+  buttons.forEach(b => b.disabled = true);
+  if (choice === item.ans) {
+    btn.classList.add("correct");
+    fb.textContent = "✓ 正確！";
+    fb.style.color = "#27ae60";
+    score++;
+  } else {
+    btn.classList.add("wrong");
+    buttons[item.ans].classList.add("correct");
+    fb.textContent = "✗ 錯誤，正確答案是 " + String.fromCharCode(65 + item.ans);
+    fb.style.color = "#e74c3c";
+  }
+  document.getElementById("score").textContent = "目前得分：" + score + " / 10";
+}
+</script>
+</body>
+</html>
